@@ -1,10 +1,5 @@
 (ns types.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
 (defn map-term
   "Map a term"
   [t f c]
