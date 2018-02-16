@@ -4,4 +4,4 @@
 
 (deftest shift-test
   (testing "shifting"
-    (is (= (shift {:type :var, :value 0} 1) {:type :var, :value 1}))))
+    (is (= (shift (variable 0) 1) (variable 1)))))

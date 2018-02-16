@@ -1,5 +1,7 @@
 (ns types.core)
 
+(defn variable [n] {:type :var, :value n})
+
 (defn map-term
   "Map a term"
   [t f c]
@@ -13,7 +15,7 @@
 (defn shift-above
   "Shift above indices of variables protecting one under d"
   [t c d]
-  (let [f #(if (< % c) {:type :var, :value %} {:type :var, :value (+ % d)})] (map-term t f c)))
+  (let [f #(if (< % c) (variable %) (variable (+ % d)))] (map-term t f c)))
 
 (defn shift
   "Shift above indices of variables"
