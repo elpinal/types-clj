@@ -12,10 +12,10 @@
      ~@clauses))
 
 (defn map-app
-  [a f & fs]
+  [a f & xs]
   (-> a
-      (#(apply update % ::fn f fs))
-      (#(apply update % ::arg f fs))))
+      (#(apply update % ::fn f xs))
+      (#(apply update % ::arg f xs))))
 
 (defn map-term
   "Maps a term.
@@ -28,8 +28,7 @@
                  ::var :>> #(f c %)
                  ::abs (update t ::abs g (inc c) g)
                  ::app :>> #(-> %
-                                (update ::fn g c g)
-                                (update ::arg g c g)
+                                (map-app g c g)
                                 app')))]
     (walk t c walk)))
 
