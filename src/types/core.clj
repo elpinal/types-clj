@@ -5,7 +5,9 @@
 (defn app [f x] {:app {:fn f, :arg x}})
 
 (defn map-term
-  "Map a term"
+  "Maps a term.
+  `f` is applied to a protection boundary and a variable.
+  The protection boundary starts from `c`, increasing each time going through abstractions."
   [t f c]
   (let [app' #((partial array-map :app) %)
         walk (fn [t c g]
@@ -19,11 +21,11 @@
     (walk t c walk)))
 
 (defn shift-above
-  "Shift above indices of variables protecting one under d"
+  "Shifts above indices of variables by `d` protecting ones under `c`."
   [t c d]
   (let [f #(if (< %2 %1) (variable %2) (variable (+ %2 d)))] (map-term t f c)))
 
 (defn shift
-  "Shift above indices of variables"
+  "Shifts above indices of variables by `d`."
   [t d]
   (shift-above t 0 d))
