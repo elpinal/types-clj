@@ -54,6 +54,15 @@
     ::abs :>> #(subst-top % x)
     ::app :>> #(eval-app-n (:fn %) (:arg %))))
 
+(defn eval-n
+  "Evaluates a term in the normal order strategy.
+  The returned term is in the normal form if it has."
+  [t]
+  (condp #(%2 %1) t
+    ::var t
+    ::abs (update t ::abs eval-n)
+    ::app :>> #(eval-app-n (:fn %) (:arg %))))
+
 (s/fdef variable
         :args (s/cat :index integer?)
         :ret ::term)
