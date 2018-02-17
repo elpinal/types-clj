@@ -8,7 +8,7 @@
   (let [walk (fn [t c g]
                (case (:type t)
                  :var (f (:value t))
-                 :abs (update t :value g (+ c 1) g)
+                 :abs (update t :value g (inc c) g)
                  :app (-> t (update :fn g c g) (update :arg g c g))))]
     (walk t c walk)))
 
