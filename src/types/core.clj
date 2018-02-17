@@ -45,6 +45,15 @@
   [t t']
   (shift (subst t 0 (shift t' 1)) -1))
 
+(defn eval-app-n
+  [f x]
+  (condp #(%2 %1) f
+    ::var (-> x
+              eval-n
+              (app f))
+    ::abs :>> #(subst-top % x)
+    ::app :>> #(eval-app-n (:fn %) (:arg %))))
+
 (s/fdef variable
         :args (s/cat :index integer?)
         :ret ::term)
