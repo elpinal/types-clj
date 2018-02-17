@@ -105,3 +105,8 @@
         :args (s/cat :term ::term
                      :boundary ::boundary
                      :delta integer?))
+
+(s/fdef eval-app-n
+        :args (s/cat :fn ::term
+                     :arg ::term)
+        :ret ::term)
