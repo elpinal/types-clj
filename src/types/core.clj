@@ -52,7 +52,7 @@
               eval-n
               (app f))
     ::abs :>> #(subst-top % x)
-    ::app :>> #(eval-app-n (:fn %) (:arg %))))
+    ::app :>> #(eval-app-n (::fn %) (::arg %))))
 
 (defn eval-n
   "Evaluates a term in the normal order strategy.
