@@ -110,3 +110,7 @@
         :args (s/cat :fn ::term
                      :arg ::term)
         :ret ::term)
+
+(s/fdef eval-n
+        :args (s/cat :term ::term)
+        :ret ::term)
