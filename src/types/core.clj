@@ -32,6 +32,19 @@
   [t d]
   (shift-above t 0 d))
 
+(defn subst
+  "Substitutes a term.
+  Replace `c` in `t` with `t'`.
+  `c` is an index of the variable in the context of `t'`."
+  [t c t']
+  (let [f #(if (= (+ %1 c) %2) (shift t' %1) (variable %2))] (map-term t f c)))
+
+(defn subst-top
+  "Substitutes a term.
+  This function acts as beta-reduction of `(\\x.t') t`."
+  [t t']
+  (shift (subst t 0 (shift t' 1)) -1))
+
 (s/fdef variable
         :args (s/cat :index integer?)
         :ret ::term)
