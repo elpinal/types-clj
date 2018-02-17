@@ -50,6 +50,12 @@
   [t t']
   (shift (subst t 0 (shift t' 1)) -1))
 
+(defn map-app
+  [f a]
+  (-> a
+      (update ::fn f)
+      (update ::arg f)))
+
 (defn eval-app-n
   [f x]
   (match f
