@@ -11,6 +11,12 @@
   `(condp #(%2 %1) ~t
      ~@clauses))
 
+(defn map-app
+  [a f & fs]
+  (-> a
+      (#(apply update % ::fn f fs))
+      (#(apply update % ::arg f fs))))
+
 (defn map-term
   "Maps a term.
   `f` is applied to a protection boundary and a variable.
@@ -49,12 +55,6 @@
   This function acts as beta-reduction of `(\\x.t') t`."
   [t t']
   (shift (subst t 0 (shift t' 1)) -1))
-
-(defn map-app
-  [f a]
-  (-> a
-      (update ::fn f)
-      (update ::arg f)))
 
 (defn eval-app-n
   [f x]
