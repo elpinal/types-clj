@@ -6,6 +6,11 @@
 (defn abs [t] {::abs t})
 (defn app [f x] {::app {::fn f, ::arg x}})
 
+(defmacro match
+  [t & clauses]
+  `(condp #(%2 %1) ~t
+     ~@clauses))
+
 (defn map-term
   "Maps a term.
   `f` is applied to a protection boundary and a variable.
