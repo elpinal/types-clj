@@ -27,9 +27,7 @@
                (match t
                  ::var :>> #(f c %)
                  ::abs (update t ::abs g (inc c) g)
-                 ::app :>> #(-> %
-                                (map-app g c g)
-                                app')))]
+                 ::app :>> #(app' (map-app % g c g))))]
     (walk t c walk)))
 
 (defn shift-above
@@ -62,7 +60,7 @@
               eval-n
               (app f))
     ::abs :>> #(subst-top % x)
-    ::app :>> #(eval-app-n (::fn %) (::arg %))))
+    ::app :>> #(map-app % eval-app-n)))
 
 (defn eval-n
   "Evaluates a term in the normal order strategy.
@@ -71,7 +69,7 @@
   (match t
     ::var t
     ::abs (update t ::abs eval-n)
-    ::app :>> #(eval-app-n (::fn %) (::arg %))))
+    ::app :>> #(map-app % eval-app-n)))
 
 (s/fdef variable
         :args (s/cat :index integer?)
