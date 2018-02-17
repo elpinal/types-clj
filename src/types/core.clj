@@ -18,7 +18,7 @@
   [t f c]
   (let [app' #((partial array-map ::app) %)
         walk (fn [t c g]
-               (condp #(%2 %1) t
+               (match t
                  ::var :>> #(f c %)
                  ::abs (update t ::abs g (inc c) g)
                  ::app :>> #(-> %
@@ -52,7 +52,7 @@
 
 (defn eval-app-n
   [f x]
-  (condp #(%2 %1) f
+  (match f
     ::var (-> x
               eval-n
               (app f))
@@ -63,7 +63,7 @@
   "Evaluates a term in the normal order strategy.
   The returned term is in the normal form if it has."
   [t]
-  (condp #(%2 %1) t
+  (match t
     ::var t
     ::abs (update t ::abs eval-n)
     ::app :>> #(eval-app-n (::fn %) (::arg %))))
