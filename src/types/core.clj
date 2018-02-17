@@ -61,7 +61,7 @@
   (condp #(%2 %1) t
     ::var t
     ::abs (update t ::abs eval-n)
-    ::app :>> #(eval-app-n (:fn %) (:arg %))))
+    ::app :>> #(eval-app-n (::fn %) (::arg %))))
 
 (s/fdef variable
         :args (s/cat :index integer?)
