@@ -67,4 +67,6 @@
 
 (deftest skk
   (testing "skk is i"
-    (are [x] (= (app (app s-combinator (app k-combinator k-combinator)) x) (app i-combinator x)))))
+    (are [x] (= (app (app s-combinator (app k-combinator k-combinator)) x) (app i-combinator x))
+      (let [v0 (variable 0)]
+        v0))))
