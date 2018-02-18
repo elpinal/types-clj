@@ -64,3 +64,7 @@
         (app (abs v5) v0) v4
         (abs (app (abs v0) v5)) (abs v5)
         (abs (app v0 (app (abs v5) (abs v0)))) (abs (app v0 v4))))))
+
+(deftest skk
+  (testing "skk is i"
+    (are [x] (= (app s (app s k)) i))))
