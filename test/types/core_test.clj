@@ -28,6 +28,21 @@
       (abs (variable 1)) (variable 18) (abs (variable 19))
       (app (variable 3) (abs (variable 9))) (abs (variable 35)) (app (variable 2) (abs (variable 8))))))
 
+(deftest subst-test
+  (testing "substitutes a term"
+    (are [x c y z] (= (subst x c y) z)
+      (variable 0) 0 (variable 0) (variable 0)
+      (variable 0) 1 (variable 1) (variable 0)
+      (variable 1) 1 (variable 0) (variable 0)
+      (variable 1) 2 (variable 0) (variable 1)
+      (variable 2) 2 (variable 1) (variable 1)
+      (variable 3) 2 (variable 10) (variable 3)
+      (variable 100) 100 (variable 20) (variable 20)
+      (abs (variable 0)) 0 (variable 18) (abs (variable 0))
+      (abs (variable 1)) 0 (variable 18) (abs (variable 19))
+      (abs (variable 1)) 1 (variable 18) (abs (variable 1))
+      (app (variable 3) (abs (variable 9))) 8 (abs (variable 35)) (app (variable 3) (abs (abs (variable 36)))))))
+
 (deftest eval-n-test
   (testing "evaluates in the normal order"
     (let [v0 (variable 0)

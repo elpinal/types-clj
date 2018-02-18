@@ -44,7 +44,7 @@
   Replace `c` in `t` with `t'`.
   `c` is an index of the variable in the context of `t'`."
   [t c t']
-  (let [f #(if (= (+ %1 c) %2) (shift t' %1) (variable %2))] (map-term t f c)))
+  (let [f #(if (= (+ %1 c) %2) (shift t' %1) (variable %2))] (map-term t f 0)))
 
 (defn subst-top
   "Substitutes a term.
