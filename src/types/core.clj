@@ -52,6 +52,14 @@
   [t t']
   (shift (subst t 0 (shift t' 1)) -1))
 
+(defn subst-top-direct
+  [t t']
+  (let [f #(cond
+             (= %2 %1) (shift t' %1)
+             (> %2 %1) (variable (dec %2))
+             :else (variable %2))]
+    (map-term t f 0)))
+
 (defn eval-app-n
   [f x]
   (match f
