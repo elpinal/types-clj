@@ -27,3 +27,22 @@
       (abs (variable 0)) (variable 18) (abs (variable 0))
       (abs (variable 1)) (variable 18) (abs (variable 19))
       (app (variable 3) (abs (variable 9))) (abs (variable 35)) (app (variable 2) (abs (variable 8))))))
+
+(deftest eval-n-test
+  (testing "evaluates in the normal order"
+    (let [v0 (variable 0)
+          v4 (variable 4)
+          v5 (variable 5)]
+      (are [x] (= (eval-n x) x)
+        v5
+        (abs v0)
+        (abs v5)
+        (app v0 v5)
+        (app v5 (abs v0))
+        (app (app v0 v0) v5)
+        (app v5 (app v5 v5)))
+      (are [x y] (= (eval-n x) y)
+        (app (abs v0) v5) v5
+        (app (abs v5) v0) v4
+        (abs (app (abs v0) v5)) (abs v5)
+        (abs (app v0 (app (abs v5) (abs v0)))) (abs (app v0 v4))))))

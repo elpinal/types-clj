@@ -12,22 +12,21 @@
      ~@clauses))
 
 (defn map-app
-  [a f & xs]
-  (-> a
-      (#(apply update % ::fn f xs))
-      (#(apply update % ::arg f xs))))
+  [t f & xs]
+  (let [{func ::fn, arg ::arg} (::app t)]
+    (app (apply f func xs)
+         (apply f arg xs))))
 
 (defn map-term
   "Maps a term.
   `f` is applied to a protection boundary and a variable.
   The protection boundary starts from `c`, increasing each time going through abstractions."
   [t f c]
-  (let [app' #((partial array-map ::app) %)
-        walk (fn [t c g]
+  (let [walk (fn [t c g]
                (match t
                  ::var :>> #(f c %)
                  ::abs (update t ::abs g (inc c) g)
-                 ::app :>> #(app' (map-app % g c g))))]
+                 ::app (map-app t g c g)))]
     (walk t c walk)))
 
 (defn shift-above
@@ -56,11 +55,16 @@
 (defn eval-app-n
   [f x]
   (match f
-    ::var (-> x
-              eval-n
-              (app f))
+    ::var (->> x
+               eval-n
+               (app f))
     ::abs :>> #(subst-top % x)
-    ::app :>> #(map-app % eval-app-n)))
+    ::app :>> #(let [{ff ::fn, fx ::arg} %
+                     f' (eval-app-n ff fx)
+                     x' (eval-n x)]
+                 (match f'
+                   ::abs :>> (fn [t] subst-top t x')
+                   (app f' x')))))
 
 (defn eval-n
   "Evaluates a term in the normal order strategy.
@@ -69,7 +73,7 @@
   (match t
     ::var t
     ::abs (update t ::abs eval-n)
-    ::app :>> #(map-app % eval-app-n)))
+    ::app :>> #(let [{f ::fn, a ::arg} %] (eval-app-n f a))))
 
 (s/fdef variable
         :args (s/cat :index integer?)
