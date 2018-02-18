@@ -70,4 +70,5 @@
     (let [skk (app s-combinator (app k-combinator k-combinator))]
       (are [x] (= (eval-n (app skk x)) (eval-n (app i-combinator x)))
         (let [v0 (variable 0)]
-          v0)))))
+          v0
+          (abs v0))))))
