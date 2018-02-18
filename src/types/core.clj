@@ -4,7 +4,7 @@
 
 (defn variable [n] {::var n})
 (defn abs [t] {::abs t})
-(defn app [f x] {::app {::fn f, ::arg x}})
+(defn app [f x] {::fn f, ::arg x})
 
 (defmacro match
   [t & clauses]
@@ -13,9 +13,9 @@
 
 (defn map-app
   [t f & xs]
-  (let [{func ::fn, arg ::arg} (::app t)]
-    (app (apply f func xs)
-         (apply f arg xs))))
+  (-> t
+      (#(apply update % ::fn f xs))
+      (#(apply update % ::arg f xs))))
 
 (defn map-term
   "Maps a term.
@@ -26,7 +26,7 @@
                (match t
                  ::var :>> #(f c %)
                  ::abs (update t ::abs g (inc c) g)
-                 ::app (map-app t g c g)))]
+                 ::fn (map-app t g c g)))]
     (walk t c walk)))
 
 (defn shift-above
@@ -59,12 +59,12 @@
                eval-n
                (app f))
     ::abs :>> #(subst-top % x)
-    ::app :>> #(let [{ff ::fn, fx ::arg} %
-                     f' (eval-app-n ff fx)
-                     x' (eval-n x)]
-                 (match f'
-                   ::abs :>> (fn [t] subst-top t x')
-                   (app f' x')))))
+    ::fn (let [{ff ::fn, fx ::arg} f
+               f' (eval-app-n ff fx)
+               x' (eval-n x)]
+           (match f'
+             ::abs :>> (fn [t] subst-top t x')
+             (app f' x')))))
 
 (defn eval-n
   "Evaluates a term in the normal order strategy.
@@ -73,7 +73,7 @@
   (match t
     ::var t
     ::abs (update t ::abs eval-n)
-    ::app :>> #(let [{f ::fn, a ::arg} %] (eval-app-n f a))))
+    ::fn (let [{f ::fn, a ::arg} t] (eval-app-n f a))))
 
 (s/fdef variable
         :args (s/cat :index integer?)
@@ -89,14 +89,11 @@
                :arg ::term)
         :ret ::term)
 
-(s/def ::app
-  (s/keys :req [::fn ::arg]))
-
 (s/def ::term
   (s/or
    :var (s/keys :req [::var])
    :abs (s/keys :req [::abs])
-   :app (s/keys :req [::app])))
+   :app (s/keys :req [::fn ::arg])))
 
 (s/def ::boundary integer?)
 
