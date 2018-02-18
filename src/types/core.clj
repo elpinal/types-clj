@@ -83,6 +83,19 @@
     ::abs (update t ::abs eval-n)
     ::fn (let [{f ::fn, a ::arg} t] (eval-app-n f a))))
 
+(def i-combinator (-> 0 variable abs))
+
+(def k-combinator (-> 1 variable abs abs))
+
+(def s-combinator
+  (let [x (variable 2)
+        y (variable 1)
+        z (variable 0)]
+    (-> (app (app x z) (app y z))
+        abs
+        abs
+        abs)))
+
 (s/fdef variable
         :args (s/cat :index integer?)
         :ret ::term)
