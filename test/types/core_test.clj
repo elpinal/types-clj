@@ -50,6 +50,7 @@
           v5 (variable 5)]
       (are [x] (= (eval-n x) x)
         v0
+        v4
         v5
         (abs v0)
         (abs v5)
