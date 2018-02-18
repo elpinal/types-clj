@@ -96,6 +96,10 @@
         abs
         abs)))
 
+(defn abs-typed
+  [t ty]
+  {::abs t, :type ty})
+
 (s/fdef variable
         :args (s/cat :index integer?)
         :ret ::term)
