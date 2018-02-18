@@ -53,6 +53,7 @@
         v4
         v5
         (abs v0)
+        (abs v4)
         (abs v5)
         (app v0 v5)
         (app v5 (abs v0))
