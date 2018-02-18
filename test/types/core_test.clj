@@ -16,7 +16,7 @@
 
 (deftest subst-top-test
   (testing "substitutes a term"
-    (are [x y z] (= (subst-top x y) z)
+    (are [x y z] (= (subst-top x y) z (subst-top-direct x y))
       (variable 0) (variable 0) (variable 0)
       (variable 0) (variable 1) (variable 1)
       (variable 0) (variable 10) (variable 10)

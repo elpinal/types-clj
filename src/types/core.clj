@@ -97,6 +97,11 @@
                :arg ::term)
         :ret ::term)
 
+(s/def ::var integer?)
+(s/def ::abs ::term)
+(s/def ::fn ::term)
+(s/def ::arg ::term)
+
 (s/def ::term
   (s/or
    :var (s/keys :req [::var])
@@ -122,6 +127,16 @@
         :args (s/cat :term ::term
                      :boundary ::boundary
                      :delta integer?))
+
+(s/fdef subst-top
+        :args (s/cat :target ::term
+                     :by ::term)
+        :ret ::term)
+
+(s/fdef subst-top-direct
+        :args (s/cat :target ::term
+                     :by ::term)
+        :ret ::term)
 
 (s/fdef eval-app-n
         :args (s/cat :fn ::term
